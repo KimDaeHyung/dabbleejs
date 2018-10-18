@@ -351,6 +351,30 @@ function readData(account, page, cb){
   	}); 
 }
 
+function fnIsLogin(req){
+	if(req.body.id != undefined && req.body.id != null ){
+		var id = req.body.id;
+		console.log("isLogin event", id);
+	}else{
+		id = "__undefined";
+	}
+	  
+	var body = {
+			"result": null,
+			"id" : null
+	};
+	//console.log("isLogin",req.session.account,id);
+	if(req.session.isLogin == true){
+		body.result = true;
+		body.id = req.session.account;
+	}else{
+		body.result = false;
+		body.id = "null";
+	}	
+	return body;
+	
+}
+
 // use res.render to load up an ejs view file
 
 
@@ -544,11 +568,27 @@ function readData(account, page, cb){
 
   });
 
+/* Original */
+/*
 app.get("/", function(req, res){
 	readData("길막테디", 1, (result) => {
 		res.render("index", {
 			title : "EJS test",
 			data : result
+		});
+	});
+});
+*/
+/* Hark Edit */
+app.get("/", function(req, res){
+	
+	var resultIsLogin = fnIsLogin(reg);
+	
+	readData("길막테디", 1, (result) => {
+		res.render("index", {
+			title : "EJS test",
+			data : result,
+			loginInfo : resultIsLogin
 		});
 	});
 });
