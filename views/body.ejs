@@ -1,30 +1,48 @@
-
-	<link href="./style/common.import.css" rel="stylesheet" type="text/css" media="screen" />
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    
-<h1>Loop it!</h1>
-<ul>
-
-    <% data.forEach(function( eachData){ %>
-        
-        <li> <div class="element tile-1 home calc bg-change"> 
-	<table style="width: 100%;">
-	<tr>
-	<td>
-	<h4 class="header icon-to-the-right">
-	<%= eachData.account %> </h4>
-	</td>
+<div id="contentList">
+<% for ( let x = 0 ; x < data ; x++ ){ %>
+<% 
+	let btnVoteEnable = "";
+	if ( "false" == data[x].votingenable ){
+		btnVoteEnable = "disabled";
+	}
 	
-	<td  style="text-align:right; margin: 0px">
-	
-	<img name="userImage" style="padding: 0px 0px 0px 0px; display: inline; max-height: 40px; max-width: 40px;" src=<%= eachData.profile %>>
-	</td>
-	</table>
-	
-	<div name="viewDefault" class="preConDetail">   
-	<%= eachData.data %> </div> 
-	</div> </li>
-        
-    <% }) %>
+	var strProfile = (data[x].profile == null) ? "" : data[x].profile ;
+	var profilePath = (strProfile.length == 5) ? "./images/user/" + strProfile : strProfile;
+			
+	let parentId = data[x].parentid == null ? "" :data[x].parentid;
+%>
 
-</ul>
+
+
+	<div class="element tile-1 home calc bg-change">
+		<table style="width: 100%;">'
+			<tr>
+				<td>
+					<h4 class="header icon-to-the-right"><%=data[x].account%></h4>
+				</td>
+				<td  style="text-align:right; margin: 0px;" onClick="javascript:gfFollowPopup('<%=x%>');">
+					<img name="userImage" style="padding: 0px 0px 0px 0px; display: inline; max-height: 40px; max-width: 40px;" src="<%=profilePath%>">
+				</td>
+			</tr>
+		</table>
+		<div onClick="javascript:fnContentDetailPopup('<%=x%>')" name="viewDefault" class="preConSimple">
+			<%=data[x].data%>
+		</div>
+		<div style="margin: 5px;"></div>
+		<div class="hint" name="createTime">timeConverter(<%=data[x].date%>)</div>
+		<div style="margin: 5px;"></div>
+
+		<button type="button" name="btnVote" <%=btnVoteEnable%> style="width:30%;" class="btn btn-default" onClick="javascript:gfContentVoteAction('<%=data[x].id%>');" ><i name="viewVoteCount" class="fa fa-thumbs-o-up"><%=data[x].voting%></i></button>
+		<button type="button" name="btnUpdate" style="width:20%; display:none;" class="btn btn-default" onClick="javascript:gfContentUpdate('<%=x%>');" ><i class="fa fa-edit"></i></button>
+		<button type="button" name="btnDetail" style="width:20%;" class="btn btn-default" onClick="javascript:fnContentDetail('<%=x%>');" ><i class="fa fa-folder-open"></i></button>
+		<%	if ( "" == parentId ){	%>
+			<button type="button" name="btnDetail" style="width:25%;" class="btn btn-default" onClick="javascript:fnLoginChkContentDetailAction(0, '<%=x%>');" ><i class="fa fa-commenting-o"></i></button>
+		<%	}	%>
+		<input type="hidden" name="hBoardId" value="<%=data[x].id%>" >
+		<input type="hidden" name="hBoardParentId" value="<%=parentId%>" >
+		<input type="hidden" name="hVoteCnt" value="<%=data[x].voting%>" >
+		<input type="hidden" name="hAccount" value="<%=data[x].account%>" >
+	</div>
+<%}%>
+
+</div>
